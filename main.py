@@ -1,12 +1,11 @@
 from datetime import timedelta
 from typing import Annotated
-
 from fastapi import FastAPI, HTTPException, Depends
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from starlette import status
 from starlette.requests import Request
-from starlette.responses import Response
+from starlette.responses import Response, RedirectResponse
 import app.db as db
 import app.auth as auth
 import app.config as cfg
@@ -15,7 +14,7 @@ import app.config as cfg
 router = FastAPI()
 
 
-@router.post("/token", response_model=auth.schems.Token)
+@router.post("/token")
 def login_for_access_token(response: Response,form_data: OAuth2PasswordRequestForm = Depends(), session: Session = Depends(db.database.get_db)):
     user = db.crud.authenticate_user(session=session, email=form_data.username, password=form_data.password)
     if not user:
@@ -41,9 +40,6 @@ async def read_users_me(
 ):
     return current_user
 
-
-@router.get("/users/me/items/")
-async def read_own_items(
-    current_user: Annotated[db.schems.User, Depends(auth.funcs.get_current_user)]
-):
-    return [{"item_id": "Foo", "owner": current_user.username}]
+@router.get('/')
+async def index(request: Request):
+    return cfg.template.TemplateResponse('home.html', context={'request': request})

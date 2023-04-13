@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+        $("#btmSumbit").click(function(){
+            $.ajax(
+                {
+                    url: '/token',
+                    method: 'post',
+                    data: {'username':$('#val1').val(), 'password':$('#val2').val()},
+                    success: function(dt){
+                        console.log(dt)
+                    },
+                    error: function (err){
+                        console.log(err)
+                    }
+
+                }
+
+            )
+
+        });
+        $("#btnLogout").click(function(){
+            $.ajax({
+                url: '/logout',
+                method: 'post',
+                data: {},
+                success: function(dt){
+                        console.log(dt)
+
+                },
+                error: function (err){
+                        console.log(err)
+                }
+
+            })
+        });
+    });
+</script>
+</head>
+<body>
+
+    <form id='my_form' action="/token" method="post">
+        <input name="username" id="val1">
+        <input name="password" id="val2">
+        <button type="button" value="Submit" id="btmSumbit"></button>
+    </form>
+    <button type="button" id="btnLogout"></button>
+
+</body>
+</html>
