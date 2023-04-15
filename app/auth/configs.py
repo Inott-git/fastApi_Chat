@@ -35,4 +35,4 @@ class OAuth2PasswordBearerWithCookie(OAuth2):
                 return None
         return param
 
-oauth2_scheme = OAuth2PasswordBearerWithCookie(tokenUrl="token")
+oauth2_scheme = OAuth2PasswordBearerWithCookie(tokenUrl="token", auto_error=False)

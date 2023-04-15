@@ -1,1 +1,1 @@
-import app.config
+from app import auth, chats, routers, db, config

@@ -9,30 +9,16 @@ from starlette.responses import Response, RedirectResponse
 import app.db as db
 import app.auth as auth
 import app.config as cfg
-
+from app.routers import users, chats
+from app.chats import chat
 
 router = FastAPI()
 
+router.include_router(users.router)
+router.include_router(chats.router)
+router.include_router(chat.router)
 
-@router.post("/token")
-def login_for_access_token(response: Response,form_data: OAuth2PasswordRequestForm = Depends(), session: Session = Depends(db.database.get_db)):
-    user = db.crud.authenticate_user(session=session, email=form_data.username, password=form_data.password)
-    if not user:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect username or password",
-        )
-    access_token_expires = timedelta(minutes=cfg.ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = auth.funcs.create_access_token(
-        data={"sub": user.email}, expires_delta=access_token_expires
-    )
-    response.set_cookie(key="access_token",value=f"Bearer {access_token}", httponly=True)  #set HttpOnly cookie in response
-    return {"access_token": access_token, "token_type": "bearer"}
 
-@router.post('/logout')
-async def logout(respounse: Response):
-    respounse.delete_cookie(key='access_token')
-    return 'Secsessful logout'
 
 @router.get("/users/me/", response_model=db.schems.User)
 async def read_users_me(

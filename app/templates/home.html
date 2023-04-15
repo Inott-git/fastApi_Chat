@@ -13,6 +13,25 @@
                     method: 'post',
                     data: {'username':$('#val1').val(), 'password':$('#val2').val()},
                     success: function(dt){
+                        window.location.replace('/chats')
+                        console.log(dt)
+                    },
+                    error: function (err){
+                        console.log(err)
+                    }
+
+                }
+
+            )
+
+        });
+        $("#rbtmSumbit").click(function(){
+            $.ajax(
+                {
+                    url: '/reg',
+                    method: 'post',
+                    data: {'username':$('#rval1').val(), 'email': $('#rval2').val(), 'password':$('#rval3').val()},
+                    success: function(dt){
                         console.log(dt)
                     },
                     error: function (err){
@@ -30,6 +49,7 @@
                 method: 'post',
                 data: {},
                 success: function(dt){
+                        window.location.replace('/chats')
                         console.log(dt)
 
                 },
@@ -43,13 +63,19 @@
 </script>
 </head>
 <body>
-
+    <p>Login</p>
     <form id='my_form' action="/token" method="post">
-        <input name="username" id="val1">
-        <input name="password" id="val2">
-        <button type="button" value="Submit" id="btmSumbit"></button>
+        <label> Email: <input name="username" id="val1"></label>
+        <label> Password: <input name="password" id="val2"></label>
+        <button type="button" value="Submit" id="btmSumbit"> Войти </button>
     </form>
-    <button type="button" id="btnLogout"></button>
+    <p>Register</p>
+     <form id='register_form' action="/reg" method="post">
+        <label> Username: <input name="username" id="rval1"></label>
+        <label> Email: <input name="email" id="rval2"></label>
+        <label> Password: <input name="password" id="rval3"></label>
+        <button type="button" id="rbtmSumbit"> Зарегестрировать </button>
+    </form>
 
 </body>
 </html>

@@ -30,6 +30,8 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)], sessio
         headers={"WWW-Authenticate": "Bearer"},
     )
     try:
+        if not token:
+            return {}
         payload = jwt.decode(token, cfg.SECRET_KEY, algorithms=[cfg.ALGORITHM])
         email: str = payload.get("sub")
         if email is None:
