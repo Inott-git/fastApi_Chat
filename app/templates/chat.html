@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Chat</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    </head>
+    <body>
+        <meta id="user_id" name="user" content="{{user.id}}">
+        <meta id="chat_id" name="chat_id" content="{{chat_id}}">
+        <h1>WebSocket Chat</h1>
+        <h2>Your ID: <span id="ws-id"></span></h2>
+        <form action="" onsubmit="sendMessage(event)">
+            <input type="text" id="messageText" autocomplete="off"/>
+            <button>Send</button>
+        </form>
+        <ul id='messages'>
+        </ul>
+
+        <script>
+            let client_id = document.querySelector("meta[name='user']").getAttribute('content')
+            let chat_id = document.querySelector("meta[name='chat_id']").getAttribute('content')
+            console.log(client_id, chat_id)
+            document.querySelector("#ws-id").textContent = client_id + '' + chat_id;
+            var ws = new WebSocket(`ws://localhost:8000/ws/${client_id}/${chat_id}`);
+            ws.onmessage = function(event) {
+                var messages = document.getElementById('messages')
+                var message = document.createElement('li')
+                var content = document.createTextNode(event.data)
+                message.appendChild(content)
+                messages.appendChild(message)
+            };
+            function sendMessage(event) {
+                var input = document.getElementById("messageText")
+                ws.send(input.value)
+                input.value = ''
+                event.preventDefault()
+            }
+
+        </script>
+    </body>
+</html>
