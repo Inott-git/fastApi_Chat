@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Ubuntu&display=swap');
+    body {
+        background: #120e21;
+        margin: 0;
+        font-family: 'Ubuntu', sans-serif;
+    }
+    .main {
+        position: absolute;
+        display: flex;
+        width: 100%;
+        height: 100%;
+        flex-direction: column;
+    }
+    .chats_main{
+        display: flex;
+        width: 100%;
+        height: 100%;
+    }
+    .head_div {
+        background: #292f37;
+        width: 100%;
+        height: 3ex;
+    }
+    .chats_list {
+        background: #17212b;
+        height: 100%;
+        width: 35%;
+        border-right: #292f37;
+        display: flex;
+        flex-direction: column;
+    }
+    .chat {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        width: 65%;
+    }
+    .message_list {
+        height: 100%;
+        width: 100%;
+    }
+    .send_div {
+        width: 98%;
+        height: 6ex;
+        line-height: 6ex;
+        background: #292f37;
+        color: #6d7883;
+        display: flex;
+        padding-left: 2%;
+    }
+    .menu {
+        width: 100%;
+        height: 6ex;
+    }
+    .menu_btn {
+        height: 100%;
+        width: auto;
+        margin-top: 1ex;
+
+    }
+    .btn_child {
+        height: 0.8ex;
+        width: 4ex;
+        background: white;
+        border-radius: 3ex;
+        margin: 0.5ex;
+        margin-left: 1ex;
+    }
+    .chats {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        margin-top: 1ex;
+    }
+    .chat_min{
+        color: white;
+        width: 100%;
+        height: 5ex;
+        display: flex;
+        line-height: 5ex;
+        margin-top: 1ex;
+    }
+    .icon {
+        height: 4ex;
+        width: 4ex;
+        margin: 0.5ex;
+        margin-left: 1ex;
+        border-radius: 50%;
+        background: white;
+    }
+    .message_list{
+        display: flex;
+        color: white;
+        flex-direction: column;
+        justify-content: end;
+    }
+    .you_msg {
+        margin: 1ex;
+        margin-left: auto;
+        min-height: 3ex;
+        max-height: 100%;
+        width: 50%;
+        background: #a2b2ff;
+        border-radius: 1ex;
+        word-break: break-word;
+        padding: 1ex;
+    }
+    .notyou_msg {
+        margin: 1ex;
+        min-height: 3ex;
+        max-height: 100%;
+        width: 45%;
+        background: #a2d1ff;
+        border-radius: 1ex;
+        word-break: break-word;
+        padding: 1ex;
+    }
+    .send_msg{
+        outline: 0;
+        background: none;
+        border: none;
+        caret-color: white;
+        width: 100%;
+    }
+    .send_btn {
+        width: 3ex;
+        height: 4ex;
+        margin: 2ex;
+        transition: width 30ms;
+    }
+    .send_btn:hover {
+        cursor: pointer;
+        width: 4ex;
+    }
+    .menu_btn:hover {
+        cursor: pointer;
+    }
+    .user_chat {
+        color: white;
+        width: 100%;
+        height: 5ex;
+        display: flex;
+        line-height: 5ex;
+        border-bottom-width: 1px;
+        border-bottom-color: white;
+    }
+</style>
+<body>
+    <div class="main">
+        <div class="head_div"></div>
+        <div class="chats_main">
+            <div class="chats_list">
+                <div class="menu">
+                    <div class="menu_btn">
+                        <div class="btn_child"></div>
+                        <div class="btn_child"></div>
+                        <div class="btn_child"></div>
+                    </div>
+                </div>
+                <div class="chats">
+                    {% for chat in chats %}
+                    <div class="chat_min">
+                        <div class="icon"></div>
+                        {% for user_chat in chat['users'] %}
+                        {% if user_chat['id'] != user.id %}
+                        <div class="name">{{ user_chat['username'] }}</div>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="chat">
+                <div class="user_chat">
+                    <div class="icon"></div>
+                    {% for user_chat in chats[0]['users'] %}
+                    {% if user_chat['id'] != user.id %}
+                    <div >{{ user_chat['username'] }}</div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                <div class="message_list">
+                    {% for msg in chats[0]['msgs'] %}
+                    {% if msg['user_id'] == user.id %}
+                    <div class="you_msg">{{msg['text']}}</div>
+                    {% else %}
+                    <div class="notyou_msg">{{msg['text']}}</div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                <div class="send_div">
+                    <input class="send_msg" placeholder=" Введите текст">
+                    <button class="send_btn"></button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

@@ -8,7 +8,9 @@ router = APIRouter()
 
 @router.get('/chats')
 async def get_chats(request: Request, current_user: Annotated[db.schems.User, Depends(auth.funcs.get_current_user)]):
-    return cfg.template.TemplateResponse('chat_main.html', {'request': request, 'user': current_user})
+    chats = await request.app.manager.get_chats(current_user.id)
+
+    return cfg.template.TemplateResponse('chat_base.html', {'request': request, 'user': current_user, 'chats': chats})
 
 
 @router.get('/chat/{chat_id}')
