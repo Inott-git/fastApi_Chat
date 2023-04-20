@@ -1,3 +1,5 @@
+import json
+
 import pymongo.database
 from fastapi.encoders import jsonable_encoder
 from pymongo import MongoClient
@@ -21,13 +23,14 @@ class ConnectionManager:
 
     async def broadcast(self, message: str, chat_id: int, client_id: int):
         chat_users = self.chats({'id':chat_id})[0]['users']
-        if client_id in chat_users:
+        if client_id == chat_users[0]['id'] or client_id == chat_users[1]['id']:
             connections = chat_users
-            print(connections)
             for connection in connections:
                 try:
-                    await self.active_connections[connection].send_text(message)
+                    data = json.dumps({'uid':client_id, 'msg':message})
+                    await self.active_connections[connection['id']].send_text(data)
                 except:
+
                     #что делать с сообщениями которые пришли юзеру не в сети
                     pass
 

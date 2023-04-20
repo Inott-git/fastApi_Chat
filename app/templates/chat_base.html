@@ -7,7 +7,7 @@
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Ubuntu&display=swap');
     body {
-        background: #120e21;
+        background: #0E1621;
         margin: 0;
         font-family: 'Ubuntu', sans-serif;
     }
@@ -88,6 +88,10 @@
         line-height: 5ex;
         margin-top: 1ex;
     }
+    .chat_min:hover {
+        cursor: pointer;
+
+    }
     .icon {
         height: 4ex;
         width: 4ex;
@@ -153,7 +157,10 @@
         border-bottom-color: white;
     }
 </style>
+
 <body>
+<meta name="client_id" content="{{user.id}}">
+<meta name="chat_id" content="-1">
     <div class="main">
         <div class="head_div"></div>
         <div class="chats_main">
@@ -168,6 +175,7 @@
                 <div class="chats">
                     {% for chat in chats %}
                     <div class="chat_min">
+                        <meta name="chatid" content="{{chat['id']}}">
                         <div class="icon"></div>
                         {% for user_chat in chat['users'] %}
                         {% if user_chat['id'] != user.id %}
@@ -183,11 +191,11 @@
                     <div class="icon"></div>
                     {% for user_chat in chats[0]['users'] %}
                     {% if user_chat['id'] != user.id %}
-                    <div >{{ user_chat['username'] }}</div>
+                    <div id="main_name">{{ user_chat['username'] }}</div>
                     {% endif %}
                     {% endfor %}
                 </div>
-                <div class="message_list">
+                <div id="message_list" class="message_list">
                     {% for msg in chats[0]['msgs'] %}
                     {% if msg['user_id'] == user.id %}
                     <div class="you_msg">{{msg['text']}}</div>
@@ -197,12 +205,57 @@
                     {% endfor %}
                 </div>
                 <div class="send_div">
-                    <input class="send_msg" placeholder=" Введите текст">
-                    <button class="send_btn"></button>
+                    <input id='sendbtn' class="send_msg" placeholder=" Введите текст">
+                    <button class="send_btn" onclick="sendMessage(event, {{user.id}})"></button>
                 </div>
             </div>
         </div>
 
     </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script>
+    function new_ws(){
+    let client_id = document.querySelector("meta[name='client_id']").getAttribute('content')
+    let chat_id = document.querySelector("meta[name='chat_id']").getAttribute('content')
+    var ws = new WebSocket(`ws://localhost:8000/ws/${client_id}/${chat_id}`);
+    ws.onmessage = function(event) {
+        var data = JSON.parse(event.data)
+        var messageList = document.getElementById('message_list')
+        var msg = document.createElement('div')
+        console.log(client_id, data.uid)
+        if (parseInt(client_id) == data.uid) {
+            msg.className = 'you_msg'
+        }
+        else {
+            msg.className = 'notyou_msg'
+        }
+        var content = document.createTextNode(data['msg'])
+        msg.appendChild(content)
+        messageList.appendChild(msg)
+        console.log(data)
+    };
+    return ws
+    }
+    $(document).ready(function(){
+        $("body").on("click", ".chat_min", function(e) {
+            chat_click_id = e.currentTarget.children[0].content
+            name_user = e.currentTarget.children[2].innerText
+            $('#main_name')[0].innerText = name_user
+            $('#message_list')[0].innerHTML = ''
+            $('meta[name="chat_id"]').content = chat_click_id
+            ws = new_ws()
+        });
+    });
+
+
+    function sendMessage(event, client_id) {
+        var input = document.getElementById("sendbtn")
+        var data = {'user_id': client_id, 'msg':input.value}
+        ws.send(data.msg)
+        input.value = ''
+        event.preventDefault()
+    }
+
+</script>
 </body>
 </html>
