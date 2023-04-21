@@ -15,7 +15,6 @@ async def websocket_endpoint(websocket: WebSocket, client_id: int, chat_id: int)
     try:
         while True:
             data = await websocket.receive_text()
-            #TODO: исправить тут ошибку
             await manager.broadcast(chat_id=chat_id, client_id=client_id, message=data)
 
     except WebSocketDisconnect:

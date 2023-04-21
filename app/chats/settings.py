@@ -42,4 +42,10 @@ class ConnectionManager:
         chats = self.chats({"users.id":client_id})
         return list(chats)
 
+    async def get_hist_chat(self, chat_id):
+        msgs = list(self.chats({'id':chat_id}))
+        return msgs[0]['msgs']
+
+    async def add_msg(self, chat_id:int, user_id:int, text:str):
+        return self.db['chats'].update_one({'id':chat_id}, {'$push': {'msgs': {'user_id':user_id, 'text': text}}})
 

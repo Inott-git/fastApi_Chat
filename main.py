@@ -24,9 +24,9 @@ root.include_router(chat.router)
 def startup_db_client():
     root.mongodb_client = MongoClient(cfg.ATLAS_URI)
     root.database = root.mongodb_client[cfg.DB_NAME]
-    print("Connected to the MongoDB database!")
-    root.manager =settings.ConnectionManager(root.database)
 
+    root.manager =settings.ConnectionManager(root.database)
+    print("Connected to the MongoDB database!")
 
 @root.on_event("shutdown")
 def shutdown_db_client():
