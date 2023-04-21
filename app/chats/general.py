@@ -1,9 +1,5 @@
-from typing import Annotated
+from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 
-from fastapi.encoders import jsonable_encoder
-from starlette.requests import Request
-from fastapi import APIRouter, WebSocket, WebSocketDisconnect, Depends
-from app import auth, db
 router = APIRouter()
 
 
@@ -16,7 +12,6 @@ async def websocket_endpoint(websocket: WebSocket, client_id: int, chat_id: int)
         while True:
             data = await websocket.receive_text()
             await manager.broadcast(chat_id=chat_id, client_id=client_id, message=data)
-
     except WebSocketDisconnect:
-        manager.disconnect(client_id)
+        await manager.disconnect(client_id)
         print(f'{client_id} ушел')

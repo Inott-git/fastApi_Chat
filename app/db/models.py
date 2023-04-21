@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String
-from .database import Base, DB
+from app.db.database import Base
 
 class User(Base):
     __tablename__ = 'user'
@@ -7,5 +7,3 @@ class User(Base):
     username = Column(String, nullable=False)
     email = Column(String, nullable=False)
     password = Column(String, nullable=False)
-#
-# Base.metadata.create_all(DB)

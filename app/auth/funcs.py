@@ -1,15 +1,13 @@
 from datetime import datetime, timedelta
 from typing import Annotated
-import app.db as db
 from sqlalchemy.orm import Session
-
 from fastapi import Depends, HTTPException
 from jose import jwt, JWTError
 from starlette import status
 
-from app import auth
+from app import db, auth
 from app.auth.configs import oauth2_scheme
-import app.config as cfg
+from app import config as cfg
 
 
 def create_access_token(data: dict, expires_delta: timedelta | None = None):

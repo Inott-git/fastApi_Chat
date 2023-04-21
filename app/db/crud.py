@@ -1,8 +1,6 @@
-from sqlalchemy import select
 from sqlalchemy.orm import Session
-
-import app.config as cfg
-from . import schems, models
+from app import config as cfg
+from app.db import schems, models
 
 
 def get_password_hash(password):
@@ -21,8 +19,6 @@ def verify_password(plain_password, hashed_password):
     return cfg.pwd_context.verify(plain_password, hashed_password)
 
 
-
-
 def get_user(session: Session, email: str):
     user = session.query(models.User).filter(models.User.email == email).first()
     return user
@@ -35,4 +31,3 @@ def authenticate_user(session: Session, email: str, password: str):
     if not verify_password(password, user.password):
         return False
     return user
-
