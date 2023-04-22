@@ -1,0 +1,165 @@
+{% extends 'base.html' %}
+{% block style %}
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Ubuntu&display=swap');
+    body {
+        height: 100%;
+        color: white;
+        background: #0E1621;
+        margin: 0;
+        font-family: 'Ubuntu', sans-serif;
+    }
+    html {
+        width: 100%;
+        height: 100%;
+    }
+    .input_form {
+        color: white;
+        font-size: 14px;
+        background: #17212b;
+        border: white 1px solid;
+        height: 100%;
+        width: 100%;
+    }
+    .subbtn {
+        background: #17212b;
+        color: white;
+        width: 50%;
+        height: 26px;
+        border: white 0.5px solid;
+        border-radius: 5px;
+    }
+    .main {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        height: 100%;
+    }
+    .log, .reg {
+        font-size: 20px;
+        position: absolute;
+
+
+    }
+    .reg {
+        top: 20%;
+        display: none;
+    }
+    .log {
+        top: 30%;
+        display: block;
+    }
+    .name_form {
+        text-align: center;
+        font-size: 24px;
+    }
+    .change {
+        border: none;
+        background: none;
+        color: white;
+        margin-left: 1.5ex;
+
+    }
+    .change:hover {
+        cursor: pointer;
+    }
+    .btn_form {
+        text-align: right;
+        font-size: 24px;
+    }
+    .subbtn:hover {
+        cursor: pointer;
+    }
+</style>
+{% endblock %}
+
+{% block main %}
+    <div class="main">
+        <div class="log">
+            <div class="name_form"><p>Login</p></div>
+            <form id='my_form' action="/token" method="post">
+                <p><label> Email:  <input class="input_form" name="username" id="val1"></label></p>
+                <p><label> Password:  <input class="input_form" name="password" id="val2"></label></p>
+                <div class="btn_form"><p><button class="subbtn" type="button" value="Submit" id="btmSumbit"> Login </button> <button type="button" class="change">Register</button></p></div>
+            </form>
+        </div>
+        <div class="reg">
+            <div class="name_form"><p>Register</p></div>
+            <form id='register_form' action="/reg" method="post">
+                <p><label> Username: <input class="input_form" name="username" id="rval1"></label></p>
+                <p><label> Email: <input class="input_form" name="email" id="rval2"></label></p>
+                <p><label> Password: <input class="input_form" name="password" id="rval3"></label></p>
+                <div class="btn_form"><p><button class="subbtn" type="button" id="rbtmSumbit"> Registration </button> <button type="button" class="change">Login</button></p></div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+{% block scripts %}
+<script>
+    $(document).ready(function(){
+        $("#btmSumbit").click(function(){
+            $.ajax(
+                {
+                    url: '/token',
+                    method: 'post',
+                    data: {'username':$('#val1').val(), 'password':$('#val2').val()},
+                    success: function(dt){
+                        window.location.replace('/chats')
+                        console.log(dt)
+                    },
+                    error: function (err){
+                        console.log(err)
+                    }
+
+                }
+
+            )
+
+        });
+        $("#rbtmSumbit").click(function(){
+            $.ajax(
+                {
+                    url: '/reg',
+                    method: 'post',
+                    data: {'username':$('#rval1').val(), 'email': $('#rval2').val(), 'password':$('#rval3').val()},
+                    success: function(dt){
+                        console.log(dt)
+                    },
+                    error: function (err){
+                        console.log(err)
+                    }
+
+                }
+
+            )
+
+        });
+        $("#btnLogout").click(function(){
+            $.ajax({
+                url: '/logout',
+                method: 'post',
+                data: {},
+                success: function(dt){
+                        window.location.replace('/chats')
+                        console.log(dt)
+
+                },
+                error: function (err){
+                        console.log(err)
+                }
+
+            })
+        });
+        $('.change').click(function (){
+            if ($('.log').css('display') == 'none'){
+                $('.log').css('display', 'block')
+                $('.reg').css('display', 'none')
+            } else {
+                $('.log').css('display', 'none')
+                $('.reg').css('display', 'block')
+            }
+            }
+        )
+    });
+</script>
+{% endblock %}

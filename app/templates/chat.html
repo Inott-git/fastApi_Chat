@@ -1,41 +1,304 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Chat</title>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-    </head>
-    <body>
-        <meta id="user_id" name="user" content="{{user.id}}">
-        <meta id="chat_id" name="chat_id" content="{{chat_id}}">
-        <h1>WebSocket Chat</h1>
-        <h2>Your ID: <span id="ws-id"></span></h2>
-        <form action="" onsubmit="sendMessage(event)">
-            <input type="text" id="messageText" autocomplete="off"/>
-            <button>Send</button>
-        </form>
-        <ul id='messages'>
-        </ul>
+{% extends 'base.html' %}
+{% block style %}
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Ubuntu&display=swap');
+    body {
+        background: #0E1621;
+        margin: 0;
+        font-family: 'Ubuntu', sans-serif;
+    }
+    .main {
+        position: absolute;
+        display: flex;
+        width: 100%;
+        height: 100%;
+        flex-direction: column;
+    }
+    .chats_main{
+        display: flex;
+        width: 100%;
+        height: 100%;
+    }
+    .head_div {
+        background: #292f37;
+        width: 100%;
+        height: 3ex;
+    }
+    .chats_list {
+        background: #17212b;
+        height: 100%;
+        width: 35%;
+        border-right: #292f37;
+        display: flex;
+        flex-direction: column;
+    }
+    .chat {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        width: 65%;
+    }
+    .message_list {
+        height: 100%;
+        width: 100%;
+    }
+    .send_div {
+        width: 98%;
+        height: 6ex;
+        line-height: 6ex;
+        background: #292f37;
+        color: #6d7883;
+        display: flex;
+        padding-left: 2%;
+    }
+    .menu {
+        width: 100%;
+        height: 6ex;
+    }
+    .menu_btn {
+        height: 100%;
+        width: auto;
+        margin-top: 1ex;
 
-        <script>
-            let client_id = document.querySelector("meta[name='user']").getAttribute('content')
-            let chat_id = document.querySelector("meta[name='chat_id']").getAttribute('content')
-            console.log(client_id, chat_id)
-            document.querySelector("#ws-id").textContent = client_id + '' + chat_id;
-            var ws = new WebSocket(`ws://localhost:8000/ws/${client_id}/${chat_id}`);
-            ws.onmessage = function(event) {
-                var messages = document.getElementById('messages')
-                var message = document.createElement('li')
-                var content = document.createTextNode(event.data)
-                message.appendChild(content)
-                messages.appendChild(message)
-            };
-            function sendMessage(event) {
-                var input = document.getElementById("messageText")
-                ws.send(input.value)
-                input.value = ''
-                event.preventDefault()
+    }
+    .btn_child {
+        height: 0.8ex;
+        width: 4ex;
+        background: white;
+        border-radius: 3ex;
+        margin: 0.5ex;
+        margin-left: 1ex;
+    }
+    .chats {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        margin-top: 1ex;
+    }
+    .chat_min{
+        color: white;
+        width: 100%;
+        height: 5ex;
+        display: flex;
+        line-height: 5ex;
+        margin-top: 1ex;
+    }
+    .chat_min:hover {
+        cursor: pointer;
+
+    }
+    .icon {
+        height: 4ex;
+        width: 4ex;
+        margin: 0.5ex;
+        margin-left: 1ex;
+        border-radius: 50%;
+        background: white;
+    }
+    .message_list{
+        display: block;
+        overflow-y: auto;
+        color: white;
+        height: 100%;
+        position: relative;
+
+
+    }
+    #message_list::-webkit-scrollbar {
+        width: 0px;
+    }
+    .you_msg {
+        margin: 1ex;
+        margin-left: auto;
+        min-height: 3ex;
+        max-height: 100%;
+        width: 50%;
+        background: #a2b2ff;
+        border-radius: 1ex;
+        word-break: break-word;
+        padding: 1ex;
+    }
+    .notyou_msg {
+        margin: 1ex;
+        min-height: 3ex;
+        max-height: 100%;
+        width: 45%;
+        background: #a2d1ff;
+        border-radius: 1ex;
+        word-break: break-word;
+        padding: 1ex;
+    }
+    .send_msg{
+        outline: 0;
+        background: none;
+        border: none;
+        caret-color: white;
+        width: 100%;
+    }
+    .send_btn {
+        width: 3ex;
+        height: 4ex;
+        margin: 2ex;
+        transition: width 30ms;
+    }
+    .send_btn:hover {
+        cursor: pointer;
+        width: 4ex;
+    }
+    .menu_btn:hover {
+        cursor: pointer;
+    }
+    .user_chat {
+        color: white;
+        width: 100%;
+        height: 5ex;
+        display: flex;
+        line-height: 5ex;
+        border-bottom-width: 1px;
+        border-bottom-color: white;
+    }
+</style>
+{% endblock %}
+
+{% block main %}
+    <meta name="client_id" content="{{user.id}}">
+    <meta name="chat_id" content="-1">
+    <div class="main">
+        <div class="head_div"></div>
+        <div class="chats_main">
+            <div class="chats_list">
+                <div class="menu">
+                    <div class="menu_btn">
+                        <div class="btn_child"></div>
+                        <div class="btn_child"></div>
+                        <div class="btn_child"></div>
+                    </div>
+                </div>
+                <div class="chats">
+                    {% for chat in chats %}
+                    <div class="chat_min">
+                        <meta name="chatid" content="{{chat['_id']}}">
+                        <div class="icon"></div>
+                        {% for user_chat in chat['users'] %}
+                        {% if user_chat['id'] != user.id %}
+                        <div class="name">{{ user_chat['username'] }}</div>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="chat">
+                <div class="user_chat">
+
+                    <div id="main_name"></div>
+                </div>
+
+                <div id="message_list" class="message_list">
+                </div>
+                <div class="send_div">
+                    <input id='sendbtn' class="send_msg" placeholder=" Введите текст">
+                    <button class="send_btn" onclick="sendMessage(event, {{user.id}})"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function new_ws(){
+    let client_id = document.querySelector("meta[name='client_id']").getAttribute('content')
+    let chat_id = document.querySelector("meta[name='chat_id']").getAttribute('content')
+    var ws = new WebSocket(`ws://localhost:8000/ws/${client_id}/${chat_id}`)
+    ws.onmessage = function(event) {
+        var data = JSON.parse(event.data)
+        var messageList = document.getElementById('message_list')
+        var msg = document.createElement('div')
+        if (parseInt(client_id) == data.uid) {
+            msg.className = 'you_msg'
+        }
+        else {
+            msg.className = 'notyou_msg'
+        }
+        var content = document.createTextNode(data['msg'])
+        msg.appendChild(content)
+        messageList.appendChild(msg)
+    };
+    return ws
+    }
+    function get_hist(msgs) {
+        var messageList = document.getElementById('message_list')
+        var client_id = $('meta[name="client_id"]')[0].content
+        msgs.map(function (msg_) {
+            var msg = document.createElement('div')
+            if (parseInt(client_id) == msg_['user_id']) {
+                msg.className = 'you_msg'
+            } else {
+                msg.className = 'notyou_msg'
             }
+            var content = document.createTextNode(msg_['text'])
+            msg.appendChild(content)
+            messageList.appendChild(msg)
+        });
+    };
+    $(document).ready(function(){
+        $("body").on("click", ".chat_min", function(e) {
+            chat_click_id = e.currentTarget.children[0].content
+            name_user = e.currentTarget.children[2].innerText
+            $('#main_name')[0].innerText = name_user
+            $('#message_list')[0].innerHTML = ''
+            $('meta[name="chat_id"]')[0].content = chat_click_id
+            var msgs
+            $.ajax(
+                {
+                    url: `/chats/${chat_click_id}/hist`,
+                    method: 'post',
+                    data: chat_click_id,
+                    success: function(dt){
+                        msgs = dt
+                        get_hist(msgs)
+                        var div = document.getElementById('message_list');
+                        div.scrollTop = 1e9
+                    },
+                    error: function (err){
+                        console.log(err)
+                    }
 
-        </script>
-    </body>
-</html>
+                });
+
+            ws = new_ws()
+
+
+
+        });
+    });
+
+
+    function sendMessage(event, client_id) {
+        var input = document.getElementById("sendbtn")
+        var data = {'user_id': client_id, 'msg': input.value}
+        let chat_id = document.querySelector("meta[name='chat_id']").getAttribute('content')
+        ws.send(data.msg)
+        console.log(client_id, chat_id, data.msg)
+        $.ajax(
+            {
+                url: `/chats/add`,
+                method: 'post',
+                data: {'chat_id': chat_id, 'user_id': client_id, 'text': data.msg},
+                success: function(dt){
+                        var div = document.getElementById('message_list');
+                        div.scrollTop = 1e9
+                    },
+                error: function (err){
+                        console.log(err)
+                    }
+            }
+        )
+        input.value = ''
+        event.preventDefault()
+    };
+
+</script>
+{% endblock %}

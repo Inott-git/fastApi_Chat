@@ -29,11 +29,6 @@ def shutdown_db_client():
     root.mongodb_client.close()
 
 
-@root.get("/users/me/", response_model=db.schems.User)
-async def read_users_me(current_user: Annotated[db.schems.User, Depends(auth.funcs.get_current_user)]):
-    return current_user
-
-
 @root.get('/')
 async def index(request: Request):
-    return cfg.template.TemplateResponse('home.html', context={'request': request})
+    return cfg.template.TemplateResponse('logreg.html', context={'request': request})
