@@ -1,6 +1,7 @@
 from typing import Annotated
 from fastapi import FastAPI, Depends
 from pymongo import MongoClient
+from sqlalchemy.orm import Session
 from starlette.staticfiles import StaticFiles
 
 from app.chats import settings
