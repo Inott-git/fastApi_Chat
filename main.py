@@ -1,6 +1,8 @@
 from typing import Annotated
 from fastapi import FastAPI, Depends
 from pymongo import MongoClient
+from starlette.staticfiles import StaticFiles
+
 from app.chats import settings
 from starlette.requests import Request
 import app.db as db
@@ -10,6 +12,8 @@ from app.routers import users, chats
 from app.chats import chat
 
 root = FastAPI()
+
+root.mount("/static", StaticFiles(directory="app/static"), name="static")
 
 root.include_router(users.router)
 root.include_router(chats.router)

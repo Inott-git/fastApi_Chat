@@ -1,0 +1,69 @@
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu&display=swap');
+    body {
+        height: 100%;
+        color: white;
+        background: #0E1621;
+        margin: 0;
+        font-family: 'Ubuntu', sans-serif;
+    }
+    html {
+        width: 100%;
+        height: 100%;
+    }
+    .input_form {
+        color: white;
+        font-size: 14px;
+        background: #17212b;
+        border: white 1px solid;
+        height: 100%;
+        width: 100%;
+    }
+    .subbtn {
+        background: #17212b;
+        color: white;
+        width: 50%;
+        height: 26px;
+        border: white 0.5px solid;
+        border-radius: 5px;
+    }
+    .main {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        height: 100%;
+    }
+    .log, .reg {
+        font-size: 20px;
+        position: absolute;
+
+
+    }
+    .reg {
+        top: 20%;
+        display: none;
+    }
+    .log {
+        top: 30%;
+        display: block;
+    }
+    .name_form {
+        text-align: center;
+        font-size: 24px;
+    }
+    .change {
+        border: none;
+        background: none;
+        color: white;
+        margin-left: 1.5ex;
+
+    }
+    .change:hover {
+        cursor: pointer;
+    }
+    .btn_form {
+        text-align: right;
+        font-size: 24px;
+    }
+    .subbtn:hover {
+        cursor: pointer;
+    }

@@ -1,0 +1,192 @@
+ @import url('https://fonts.googleapis.com/css2?family=Ubuntu&display=swap');
+    body {
+        background: #0E1621;
+        margin: 0;
+        font-family: 'Ubuntu', sans-serif;
+    }
+    .main {
+        top: 3%;
+        position: absolute;
+        display: flex;
+        width: 100%;
+        height: 97%;
+        flex-direction: column;
+    }
+    .chats_main{
+        display: flex;
+        width: 100%;
+        height: 100%;
+    }
+    .head_div {
+        position: absolute;
+        background: #292f37;
+        width: 100%;
+        height: 3%;
+        z-index: 100;
+    }
+    .chats_list {
+        background: #17212b;
+        height: 100%;
+        width: 35%;
+        border-right: #292f37;
+        display: flex;
+        flex-direction: column;
+    }
+    .chat {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        width: 65%;
+    }
+    .message_list {
+        height: 100%;
+        width: 100%;
+    }
+    .send_div {
+        width: 98%;
+        height: 6ex;
+        line-height: 6ex;
+        background: #292f37;
+        color: #6d7883;
+        display: flex;
+        padding-left: 2%;
+    }
+    .menu {
+        width: 100%;
+        height: 6ex;
+        display: flex;
+    }
+    .menu_btn {
+        height: 100%;
+        width: auto;
+        margin-top: 1ex;
+
+    }
+    .btn_child {
+        height: 0.8ex;
+        width: 4ex;
+        background: white;
+        border-radius: 3ex;
+        margin: 0.5ex;
+        margin-left: 1ex;
+    }
+    .chats {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        margin-top: 1ex;
+    }
+    .chat_min{
+        color: white;
+        width: 100%;
+        height: 5ex;
+        display: flex;
+        line-height: 5ex;
+        margin-top: 1ex;
+    }
+    .chat_min:hover {
+        cursor: pointer;
+
+    }
+    .icon {
+        height: 4ex;
+        width: 4ex;
+        margin: 0.5ex;
+        margin-left: 1ex;
+        border-radius: 50%;
+        background: white;
+    }
+    .message_list{
+        display: block;
+        overflow-y: auto;
+        color: white;
+        height: 100%;
+        position: relative;
+
+
+    }
+    #message_list::-webkit-scrollbar {
+        width: 0px;
+    }
+    .you_msg {
+        margin: 1ex;
+        margin-left: auto;
+        min-height: 3ex;
+        max-height: 100%;
+        width: 50%;
+        background: #a2b2ff;
+        border-radius: 1ex;
+        word-break: break-word;
+        padding: 1ex;
+    }
+    .notyou_msg {
+        margin: 1ex;
+        min-height: 3ex;
+        max-height: 100%;
+        width: 45%;
+        background: #a2d1ff;
+        border-radius: 1ex;
+        word-break: break-word;
+        padding: 1ex;
+    }
+    .send_msg{
+        outline: 0;
+        color: white;
+        background: none;
+        border: none;
+        caret-color: white;
+        width: 100%;
+    }
+    .send_btn {
+        width: 3ex;
+        height: 4ex;
+        margin: 2ex;
+        transition: width 30ms;
+    }
+    .send_btn:hover {
+        cursor: pointer;
+        width: 4ex;
+    }
+    .menu_btn:hover {
+        cursor: pointer;
+    }
+    .user_chat {
+        color: white;
+        width: 100%;
+        height: 5ex;
+        display: flex;
+        line-height: 5ex;
+        border-bottom-width: 1px;
+        border-bottom-color: white;
+    }
+    .opacity {
+        display: none;
+        width: 65%;
+        height: 100%;
+        left: 35%;
+        background: #17212b;
+        opacity: 0.8;
+        position: absolute;
+        z-index: 10;
+    }
+    .div_menu {
+        box-sizing: border-box;
+        display: none;
+        width: 35%;
+        height: 100%;
+        background: #0E1621;
+        position: absolute;
+        text-align: center;
+    }
+    .logout_btn {
+        background: none;
+        color: white;
+        font-family: Ubuntu, sans-serif;
+        font-size: 3ex;
+        border: 1px white solid;
+        border-radius: 10px;
+    }
+    .logout_btn:hover {
+        cursor: pointer;
+    }

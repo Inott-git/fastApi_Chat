@@ -26,3 +26,8 @@ async def add_msg_in_hist(chat_id: Annotated[str, Form()],
                           request: Request):
     await request.app.manager.add_msg(chat_id, user_id, text)
     return 'OK'
+
+@router.post('/chats/add_chat')
+async def add_chat(request: Request, users: dict):
+    return await request.app.manager.add_chat({'uid': users['uid1'], 'username': users['un1']},
+                                       {'uid': users['uid2'], 'username': users['un2']})

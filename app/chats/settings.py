@@ -30,8 +30,8 @@ class ConnectionManager:
                 except Exception as ex:
                     print(ex)
 
-    async def create_chat(self, uid1, uid2):
-        chat = schems.Chat(user_id_1=uid1, user_id_2=uid2)
+    async def create_chat(self, user1: schems.ChatUser, user2: schems.ChatUser):
+        chat = schems.Chat(users=[user1, user2])
         return self.db['chats'].insert_one(jsonable_encoder(chat))
 
     async def get_chats(self, client_id):
