@@ -1,7 +1,8 @@
 from typing import Annotated
 from fastapi import APIRouter, Depends, Form
+from sqlalchemy.orm import Session
 from starlette.requests import Request
-from app import db, auth
+from app import db, auth, chats
 from app import config as cfg
 
 router = APIRouter()
@@ -27,7 +28,10 @@ async def add_msg_in_hist(chat_id: Annotated[str, Form()],
     await request.app.manager.add_msg(chat_id, user_id, text)
     return 'OK'
 
-@router.post('/chats/add_chat')
-async def add_chat(request: Request, users: dict):
-    return await request.app.manager.add_chat({'uid': users['uid1'], 'username': users['un1']},
-                                       {'uid': users['uid2'], 'username': users['un2']})
+
+@router.post('/chats/add_chat', response_model=chats.schems.Chat)
+async def add_chat(request: Request, user_id_1: Annotated[int, Form()], user_id_2: Annotated[int, Form()], session: Session = Depends(db.database.get_db)):
+    user1 = db.crud.get_user_id(session, user_id_1)
+    user2 = db.crud.get_user_id(session, user_id_2)
+    return await request.app.manager.create_chat({'id': user1.id, 'username': user1.username},
+                                       {'id': user2.id, 'username': user2.username})

@@ -32,7 +32,8 @@ class ConnectionManager:
 
     async def create_chat(self, user1: schems.ChatUser, user2: schems.ChatUser):
         chat = schems.Chat(users=[user1, user2])
-        return self.db['chats'].insert_one(jsonable_encoder(chat))
+        new_id = self.db['chats'].insert_one(jsonable_encoder(chat)).inserted_id
+        return self.db['chats'].find_one({'_id': ObjectId(new_id)})
 
     async def get_chats(self, client_id):
         chats = self.chats({"users.id": client_id})

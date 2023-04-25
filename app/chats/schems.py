@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
 class ChatUser(BaseModel):
-    uid: int
+    id: int
     username: str
 
 

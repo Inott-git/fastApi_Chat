@@ -1,9 +1,11 @@
 from datetime import timedelta
 from typing import Annotated
+from app.db import schems
 from fastapi import APIRouter, HTTPException, Depends, Form
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from starlette import status
+from starlette.requests import Request
 from starlette.responses import Response
 from app import db
 from app import auth
@@ -45,3 +47,9 @@ async def register_user(username: Annotated[str, Form()],
                                                          email=email,
                                                          password=password), session=session)
     return new_user
+
+
+@router.post('/get_user_id', response_model=schems.User)
+async def get_user_by_id(data: Annotated[int, Form()], session: Session = Depends(db.database.get_db)):
+    user = db.crud.get_user_id(id=data, session=session)
+    return user

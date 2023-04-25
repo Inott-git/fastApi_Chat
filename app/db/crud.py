@@ -24,6 +24,15 @@ def get_user(session: Session, email: str):
     return user
 
 
+def get_user_id(session: Session, id: int):
+    user = session.query(models.User).filter(models.User.id == id).first()
+    if not user:
+        return {'id':-1,
+                'username': '',
+                'email': ''}
+    return user
+
+
 def authenticate_user(session: Session, email: str, password: str):
     user = get_user(session, email)
     if not user:
