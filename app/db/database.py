@@ -11,8 +11,7 @@ Base = declarative_base()
 
 
 def get_db():
+    if not 'user' in Base.metadata.tables:
+        Base.metadata.create_all()
     db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+    return db

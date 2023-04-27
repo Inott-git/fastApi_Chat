@@ -7,7 +7,7 @@ class ChatUser(BaseModel):
 
 class Msg(BaseModel):
     user_id: int
-    msg: str
+    text: str
 
 
 class Chat(BaseModel):

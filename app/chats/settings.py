@@ -44,4 +44,5 @@ class ConnectionManager:
         return msgs[0]['msgs']
 
     async def add_msg(self, chat_id: str, user_id: int, text: str):
-        return self.db['chats'].update_one({'_id':ObjectId(chat_id)}, {'$push': {'msgs': {'user_id': user_id, 'text': text}}})
+        self.db['chats'].update_one({'_id':ObjectId(chat_id)}, {'$push': {'msgs': {'user_id': user_id, 'text': text}}})
+        return self.db['chats'].find_one({'_id':ObjectId(chat_id)})['msgs'][-1]

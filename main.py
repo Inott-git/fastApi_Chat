@@ -2,6 +2,7 @@ from typing import Annotated
 from fastapi import FastAPI, Depends
 from pymongo import MongoClient
 from sqlalchemy.orm import Session
+from starlette.responses import HTMLResponse
 from starlette.staticfiles import StaticFiles
 
 from app.chats import settings
@@ -26,14 +27,16 @@ def startup_db_client():
     root.mongodb_client = MongoClient(cfg.ATLAS_URI)
     root.database = root.mongodb_client[cfg.DB_NAME]
     root.manager = settings.ConnectionManager(root.database)
-    print("Connected to the MongoDB database!")
+    root.db_session = db.database.get_db()
+    print("Connected to the databases!")
 
 
 @root.on_event("shutdown")
 def shutdown_db_client():
     root.mongodb_client.close()
+    root.db_session.close()
 
 
-@root.get('/')
+@root.get('/', response_class=HTMLResponse, tags=['Home'])
 async def index(request: Request):
     return cfg.template.TemplateResponse('logreg.html', context={'request': request})

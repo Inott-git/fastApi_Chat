@@ -93,15 +93,15 @@
 
     function sendMessage(event, client_id) {
         var input = document.getElementById("sendbtn")
-        var data = {'user_id': client_id, 'msg': input.value}
+        var data = {'user_id': client_id, 'text': input.value}
         let chat_id = document.querySelector("meta[name='chat_id']").getAttribute('content')
-        ws.send(data.msg)
-        console.log(client_id, chat_id, data.msg)
+        ws.send(data.text)
+        console.log(client_id, chat_id, data.text)
         $.ajax(
             {
                 url: `/chats/add`,
                 method: 'post',
-                data: {'chat_id': chat_id, 'user_id': client_id, 'text': data.msg},
+                data: {'chat_id': chat_id, 'user_id': client_id, 'text': data.text},
                 success: function(dt){
                         var div = document.getElementById('message_list');
                         div.scrollTop = 1e9
