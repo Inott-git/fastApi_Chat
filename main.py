@@ -15,7 +15,7 @@ from app.chats import chat
 
 root = FastAPI()
 
-root.mount("/static", StaticFiles(directory="app/static"), name="static")
+root.mount("/static", StaticFiles(directory=r"D:\Проекты\fastApi_WebSoket\app\static"), name="static")
 
 root.include_router(users.router)
 root.include_router(chats.router)

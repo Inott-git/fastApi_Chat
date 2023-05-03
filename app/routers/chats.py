@@ -24,13 +24,14 @@ async def get_chats(request: Request, current_user: Annotated[db.schems.User, De
                                           'chats': chats_by_user})
 
 
-@router.post('/chats/{chat_id}/hist', response_model=list[chats.schems.Msg], tags=['Chats'])
-async def get_hist_by_chat(chat_id: str, request: Request):
+@router.post('/chats/hist', response_model=list[chats.schems.Msg], tags=['Chats'])
+async def get_hist_by_chat(request: Request, chat_id: Annotated[str, Form()]):
     """
     Get history of chat by id
     """
-    msgs = await request.app.manager.get_hist_chat(chat_id)
-    return msgs
+    return await request.app.manager.get_hist_chat(chat_id)
+
+
 
 
 @router.post('/chats/add', response_model=chats.schems.Msg, tags=['Chats'])

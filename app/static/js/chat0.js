@@ -43,9 +43,9 @@
             var msgs
             $.ajax(
                 {
-                    url: `/chats/${chat_click_id}/hist`,
+                    url: `/chats/hist`,
                     method: 'post',
-                    data: chat_click_id,
+                    data: {'chat_id': chat_click_id},
                     success: function(dt){
                         msgs = dt
                         get_hist(msgs)
