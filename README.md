@@ -25,4 +25,11 @@ _Frontend_
 5. You can see endpoint -> [Docs](http://127.0.0.1:8000/docs)
 ![](image/docs.png?raw=true)
 6. The chat(first login or register) itself -> [Home](http://127.0.0.1:8000/)
+
+ __!!! DON'T REGISTER WITH YOU REAL PASSWORD, BECAUSE DATABASE SAVE IN GIT!!!__
+
 7. You can register 2 users(and add by id(number of account) in menu)
+
+______________________________________________________________________________________
+_Project create for my education and i can guess, that it have a lot of weak spots :)_
+______________________________________________________________________________________

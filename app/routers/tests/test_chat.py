@@ -1,16 +1,10 @@
-import json
-
 import pytest
-from fastapi import FastAPI
-from httpx import AsyncClient, ASGITransport
-from fastapi.testclient import TestClient
+from httpx import AsyncClient
 from pymongo import MongoClient
-
-from app.chats import schems
-import main
 from main import root
 import app.config as cfg
 from app import db, chats
+
 
 @pytest.fixture()
 async def create_app():
@@ -21,6 +15,7 @@ async def create_app():
     yield
     root.mongodb_client.close()
     root.db_session.close()
+
 
 @pytest.mark.anyio
 async def test_index_chat():
@@ -37,5 +32,3 @@ async def test_hist_chat():
         await client.post('/chats/hist', data=form_data)
 
 
-
-#TODO: оформить все в виде классов и доделать тесты
